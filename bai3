@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 10
+void xuatMang(int a[], int n) {
+  for (int i = 0; i < n; i++) {
+    printf("%d ", a[i]);
+  }
+  printf("\n");
+}
+void sapXepTang(int a[], int n) {
+  for (int i = 0; i < n - 1; i++) {
+    for (int j = 0; j < n - i - 1; j++) {
+      if (a[j] > a[j + 1]) {
+        int temp = a[j];
+        a[j] = a[j + 1];
+        a[j + 1] = temp;
+      }
+    }
+  }
+}
+void sapXepGiam(int a[], int n) {
+  for (int i = 0; i < n - 1; i++) {
+    for (int j = 0; j < n - i - 1; j++) {
+      if (a[j] < a[j + 1]) {
+        int temp = a[j];
+        a[j] = a[j + 1];
+        a[j + 1] = temp;
+      }
+    }
+  }
+}
+int main() {
+  int a[MAX] = {5, 2, 9, 1, 5, 6, 8, 3, 4, 7};
+  int n = MAX;
+  printf("Mang ban dau:\n");
+  xuatMang(a, n);
+  sapXepTang(a, n);
+  printf("Sau khi sap xep tang dan (Cach 1):\n");
+  xuatMang(a, n);
+  sapXepGiam(a, n);
+  printf("Sau khi sap xep giam dan (Cach 2):\n");
+  xuatMang(a, n);
+  return 0;
+}
