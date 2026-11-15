@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
+#define MAX 1000
+typedef struct {
+  char ten[50];
+  int tuoi;
+  float diemTB;
+} SinhVien;
+void chonTrucTiep(SinhVien a[], int n) {
+  for (int i = 0; i < n - 1; i ++) {
+    int min = i;
+    for (int j = i + 1; j < n; j++) {
+      if (strcmp(a[j].ten, a[min].ten) < 0) {
+        min = j;
+      }
+    }
+    if (min != i) {
+      SinhVien temp = a[i];
+      a[i] = a[min];
+      a[min] = temp;
+    }
+  }
+}
+void sapXepChen(SinhVien a[], int n) {
+  for (int i = 1; i < n; i++) {
+    SinhVien x = a[i];
+    int pos = i - 1;
+    while (pos >= 0 && strcmp(a[pos].ten, x.ten) > 0) {
+      a[pos + 1] = a[pos];
+      pos--;
+    }
+    a[pos + 1] = x;
+  }
+}
+int soSanhSinhVien(const void *a, const void *b) {
+  SinhVien *sv1 = (SinhVien *)a;
+  SinhVien *sv2 = (SinhVien *)b;
+  return strcmp(sv1->ten, sv2->ten);
+}
+void saoChepMang(SinhVien goc[], SinhVien dich[], int n) {
+  for (int i = 0; i < n; i++) {
+    dich[i] = goc[i];
+  }
+}
+int main() {
+  int n = MAX;
+  SinhVien *dsGoc = (SinhVien *)malloc(n * sizeof(SinhVien));
+  SinhVien *dsTest = (SinhVien *)malloc(n * sizeof(SinhVien));
+  for (int i = 0; i < n; i++) {
+    sprintf(dsGoc[i].ten, "SinhVien %d", rand() % 1000);
+    dsGoc[i].tuoi = 18 + rand() % 5;
+    dsGoc[i].diemTB = (float)(rand() % 100) / 10.0;
+  }
+  clock_t start, end;
+  double time_spent;
+  saoChepMang(dsGoc, dsTest, n);
+  start = clock();
+  chonTrucTiep(dsTest, n);
+  end = clock();
+  time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+  printf("Thoi gian chon truc tiep: %f giay\n", time_spent);
+  saoChepMang(dsGoc, dsTest, n);
+  start = clock();
+  sapXepChen(dsTest, n);
+  end = clock();
+  time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+  printf("Thoi gian sap xep chen: %f giay\n", time_spent);
+  saoChepMang(dsGoc, dsTest, n);
+  start = clock();
+  qsort(dsTest, n, sizeof(SinhVien), soSanhSinhVien);
+  end = clock();
+  time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+  printf("Thoi gian qsort cua C: %f giay\n", time_spent);
+  free(dsGoc);
+  free(dsTest);
+  return 0;
+}
